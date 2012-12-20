@@ -125,6 +125,13 @@ module MotionData
       def scopeByName(name)
         scopes[name.to_sym]
       end
+
+      def afterSave(name)
+        NSNotificationCenter.defaultCenter.addObserver(self,
+                                                       selector:name + ':',
+                                                       name:NSManagedObjectContextDidSaveNotification,
+                                                       object:MotionData::Context.current)#might be better to choose which context we want to observe
+      end
     end
 
     # Called from method that's dynamically added from
@@ -164,5 +171,4 @@ module MotionData
       description
     end
   end
-
 end

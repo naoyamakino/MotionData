@@ -9,6 +9,11 @@ class Author
 
   property :name, String, :required => true
   property :fee, Float
+  attr_accessor :count
+  afterSave :after_save
+  def self.after_save(notification)
+    @count += 1
+  end
 end
 
 class Article

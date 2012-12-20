@@ -114,6 +114,15 @@ module MotionData
         author.articles.published.withTitle.to_a.should == [article2, article1]
       end
     end
+
+    describe "afterSave" do
+      it "should call a callback funciton after a save made to MotionData::Context.current" do
+        author = Author.new(:name => 'John Kenneth')
+        author.count = 0
+        MotionData::Context.current.saveChanges
+        author.count.should == 1
+      end
+    end
   end
 
 end
