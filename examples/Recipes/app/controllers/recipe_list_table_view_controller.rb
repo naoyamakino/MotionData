@@ -6,6 +6,7 @@ class RecipeListTableViewController < UITableViewController
                                                                                    target:self,
                                                                                    action:'add:')
     tableView.rowHeight = 44
+    addObserver
 
     error = Pointer.new(:object)
     unless fetchedResultsController.performFetch(error)
@@ -50,6 +51,18 @@ class RecipeListTableViewController < UITableViewController
       controller.delegate = self
       controller
     end
+  end
+
+  def addObserver
+    NSNotificationCenter.defaultCenter.addObserver(self,
+                                                   selector:'objectContextDidSaveNotification:',
+                                                   name:NSManagedObjectContextDidSaveNotification,
+                                                   object:MotionData::Context.current)
+  end
+
+  def objectContextDidSaveNotification(notification)
+    puts 'objectContextDidSaveNotification called'
+    puts notification.inspect
   end
 
   def controllerWillChangeContent(controller)
